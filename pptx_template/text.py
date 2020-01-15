@@ -10,12 +10,13 @@ from six import string_types
 import pptx_template.pyel as pyel
 
 from pptx.shapes.graphfrm import GraphicFrame
-from pptx.shapes.table import Table
+#from pptx.shapes.table import Table
 
 log = logging.getLogger()
 
 _EL_RE = re.compile(r"\{([A-Za-z0-9._\-]+)\}")
 _SLIDE_ID_RE = re.compile(r"\{id:([A-Za-z0-9._\-]+)\}")
+_IMAGE_RE = re.compile(r"\{image:([A-Za-z0-9._\-]+)\}")
 
 def extract_slide_id(text):
     match = _SLIDE_ID_RE.search(text)
@@ -23,6 +24,15 @@ def extract_slide_id(text):
         return match.group(1)
     else:
         return None
+
+
+def extract_image(text):
+    match = _IMAGE_RE.search(text)
+    if match:
+        return match.group(1)
+    else:
+        return None
+
 
 def _iterate_els(text):
     pos = 0
@@ -33,6 +43,7 @@ def _iterate_els(text):
             yield text_id_match.group(1)
         else:
             break;
+
 
 def _el_to_placeholder(el):
     return u"{%s}" % el
@@ -85,6 +96,7 @@ def replace_el_in_text_frame_with_str(text_frame, el, replacing_text):
         return True
     return False
 
+
 def replace_all_els_in_text_frame(text_frame, model):
     """
      text_frame 中のテキストに EL 形式が一つ以上あれば、それを model の該当する値と置き換える
@@ -103,6 +115,7 @@ def replace_all_els_in_text_frame(text_frame, model):
 
         if not replace_el_in_text_frame_with_str(text_frame, el, replacing_text):
             log.error(u"Cannot find {%s} in one text-run. To fix this, select this whole EL [%s] and reset font size by clicking size up then down" % (text_id, text_frame.text))
+
 
 def _find_el_position(texts, el):
     """
