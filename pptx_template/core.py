@@ -9,6 +9,7 @@ import logging
 
 import pptx_template.pptx_util as util
 import pptx_template.text as txt
+import pptx_template.styled_text as styled_txt
 import pptx_template.chart as ch
 import pptx_template.table as tb
 import pptx_template.image as img
@@ -33,6 +34,7 @@ def edit_slide(slide, model, skip_model_not_found = False):
     for shape in txt.select_all_text_shapes(slide):
         try:
             txt.replace_all_els_in_text_frame(shape.text_frame, model)
+            styled_txt.replace_all_els_in_text_frame(shape.text_frame, model)
             img.replace_img_in_shape(shape, model, slide)
         except:
             if not skip_model_not_found:
@@ -40,6 +42,7 @@ def edit_slide(slide, model, skip_model_not_found = False):
     for shape in txt.select_all_tables(slide):
         try:
             txt.replace_all_els_in_table(shape, model)
+            styled_txt.replace_all_els_in_table(shape, model)
         except:
             if not skip_model_not_found:
                 raise
