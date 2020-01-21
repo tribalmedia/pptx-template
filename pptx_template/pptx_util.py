@@ -2,6 +2,7 @@
 # coding=utf-8
 
 from pptx.chart.axis import ValueAxis
+from pptx.enum.dml import MSO_COLOR_TYPE
 
 import logging
 
@@ -36,10 +37,13 @@ def add_styled_run(paragraph, styled_run):
     run = paragraph.add_run()
     font = run.font
     font.bold = styled_run.font.bold
-    font.color.rgb = styled_run.font.color.rgb
     font.italic = styled_run.font.italic
     font.language_id = styled_run.font.language_id
     font.name = styled_run.font.name
     font.size = styled_run.font.size
     font.underline = styled_run.font.underline
+    if styled_run.font.color.type == MSO_COLOR_TYPE.RGB:
+        font.color.rgb = styled_run.font.color.rgb
+    elif styled_run.font.color.type == MSO_COLOR_TYPE.SCHEME:
+        font.color.theme_color = styled_run.font.color.theme_color
     return run
