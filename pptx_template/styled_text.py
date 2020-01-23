@@ -49,7 +49,7 @@ def replace_el_in_text_frame_with_list(text_frame, el, texts):
             continue
 
         ((start_run, start_pos), (end_run, end_pos)) = _find_el_position([r.text for r in paragraph.runs], el)
-        base_runs = copy.deepcopy(paragraph.runs)
+        base_runs = paragraph.runs
         paragraph.clear()
 
         for (i, base_run) in enumerate(base_runs):
